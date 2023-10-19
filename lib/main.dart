@@ -28,7 +28,7 @@ class _NaviState extends State<Navi> {
     const BottomNavigationBarItem(
         icon: Icon(Icons.chat_rounded), label: 'result'),
   ];
-  var pages = [CafeOreder(), const CafeItem(), const CafeResult()];
+  var pages = [const CafeOreder(), const CafeItem(), const CafeResult()];
   dynamic body;
 
   @override
