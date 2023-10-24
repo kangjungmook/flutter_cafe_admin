@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cafe_admin/my_cafe.dart';
 
@@ -37,19 +36,24 @@ class _CafeItemState extends State<CafeItem> {
                       onSelected: (value) async {
                         switch (value) {
                           case 'modify':
-                            var result = Navigator.push(
+                            var result = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     CafeCategoryAddForm(id: data.id),
                               ),
                             );
+                            if (result == true) {
+                              getCategory();
+                            }
                             break;
                           case 'delete':
-                            var result = myCafe.delete(
+                            var result = await myCafe.delete(
                                 collectionName: categoryName, id: data.id);
 
-                            getCategory();
+                            if (result == true) {
+                              getCategory();
+                            }
                             break;
                         }
                       },
@@ -126,23 +130,28 @@ class _CafeCategoryAddFormState extends State<CafeCategoryAddForm> {
   String? id;
   var isUsed = true;
 
-  Future<QuerySnapshot> getData({required String id}) async {
+  Future<void> getData({required String id}) async {
     var data = await myCafe.get(
-        collectionName: categoryName,
-        id: id,
-        filedName: null,
-        filedValue: null);
-    return data;
+      collectionName: categoryName,
+      id: id,
+    );
+
+    // data['categoryName']
+    // data['isUsed']
+
+    setState(() {
+      controller.text = data['categoryName'];
+      isUsed = data['isUsed'];
+    });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    var id = widget.id;
+    id = widget.id;
     if (id != null) {
-      var data = getData(id: id);
-      print(data);
+      getData(id: id!);
     }
   }
 
@@ -160,8 +169,13 @@ class _CafeCategoryAddFormState extends State<CafeCategoryAddForm> {
                     'categoryName': controller.text,
                     'isUsed': isUsed
                   };
-                  var result = await myCafe.insert(
-                      collectionName: categoryName, data: data);
+                  print(id);
+
+                  var result = id != null
+                      ? await myCafe.update(
+                          collectionName: categoryName, id: id!, data: data)
+                      : await myCafe.insert(
+                          collectionName: categoryName, data: data);
                   if (result == true) {
                     Navigator.pop(context, true);
                   }

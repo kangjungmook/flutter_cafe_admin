@@ -25,23 +25,36 @@ class MyCage {
 
   Future<dynamic> get({
     required String collectionName,
-    required String? id,
-    required String? filedName,
-    required String? filedValue,
+    String? id,
+    String? filedName,
+    String? filedValue,
   }) async {
     try {
       if (id == null && filedName == null) {
-        return db.collection(collectionName).get();
+        return await db.collection(collectionName).get();
       } else if (id != null) {
-        return db.collection(collectionName).doc(id).get();
+        return await db.collection(collectionName).doc(id).get();
       } else if (filedName != null) {
-        return db
+        return await db
             .collection(collectionName)
-            .where(filedName, isEqualTo: filedValue);
+            .where(filedName, isEqualTo: filedValue)
+            .get();
       }
     } catch (e) {
       return null;
     }
-    return null;
+  }
+
+  Future<bool> update({
+    required collectionName,
+    required String id,
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      await db.collection(collectionName).doc(id).update(data);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }
