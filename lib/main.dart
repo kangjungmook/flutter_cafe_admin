@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_cafe_admin/cafe_item.dart';
 import 'package:flutter_cafe_admin/cafe_result.dart';
-import 'package:flutter_cafe_admin/oreder.dart';
 import 'firebase_options.dart';
+import 'oreder.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -21,22 +21,19 @@ class Navi extends StatefulWidget {
 
 class _NaviState extends State<Navi> {
   int _index = 1;
+
   List<BottomNavigationBarItem> items = [
     const BottomNavigationBarItem(
-        icon: Icon(Icons.shopping_basket_outlined), label: 'order'),
-    const BottomNavigationBarItem(icon: Icon(Icons.addchart), label: 'items'),
+        icon: Icon(Icons.shopping_bag), label: 'order'),
+    const BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'items'),
     const BottomNavigationBarItem(
-        icon: Icon(Icons.chat_rounded), label: 'result'),
+      icon: Icon(Icons.show_chart),
+      label: 'result',
+    ),
   ];
-  var pages = [const CafeOreder(), const CafeItem(), const CafeResult()];
+
+  var pages = [const CafeOrder(), const CafeItem(), const CafeResult()];
   dynamic body;
-
-  @override
-  void initState() {
-    super.initState();
-    body = pages[1];
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MyCage {
+class MyCafe {
   var db = FirebaseFirestore.instance;
 
   Future<bool> insert(
@@ -14,6 +14,39 @@ class MyCage {
     }
   }
 
+  Future<dynamic> get({
+    required String collectionName,
+    String? id, //고유아이디
+    String? fieldName, //이름
+    String? fieldValue,
+  }) async {
+    try {
+      //전체찾기
+      if (id == null && fieldName == null) {
+        print('1');
+        return await db.collection(collectionName).get();
+      } else if (id != null) {
+        print('2');
+        //고유아이디로 찾아서 리턴
+        return await db.collection(collectionName).doc(id).get();
+        // return await db
+        //     .collection(collectionName)
+        //     .where(FieldPath.documentId, isEqualTo: id)
+        //     .get();
+      } else if (fieldName != null) {
+        print('3');
+        //필드값을 가지고 찾기
+        return await db
+            .collection(collectionName)
+            .where(fieldName, isEqualTo: fieldValue)
+            .get();
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
   Future<bool> delete({required String collectionName, required id}) async {
     try {
       var result = await db.collection(collectionName).doc(id).delete();
@@ -23,35 +56,13 @@ class MyCage {
     }
   }
 
-  Future<dynamic> get({
-    required String collectionName,
-    String? id,
-    String? filedName,
-    String? filedValue,
-  }) async {
-    try {
-      if (id == null && filedName == null) {
-        return await db.collection(collectionName).get();
-      } else if (id != null) {
-        return await db.collection(collectionName).doc(id).get();
-      } else if (filedName != null) {
-        return await db
-            .collection(collectionName)
-            .where(filedName, isEqualTo: filedValue)
-            .get();
-      }
-    } catch (e) {
-      return null;
-    }
-  }
-
   Future<bool> update({
     required collectionName,
     required String id,
-    required Map<String, dynamic> data,
+    required data,
   }) async {
     try {
-      await db.collection(collectionName).doc(id).update(data);
+      var result = await db.collection(collectionName).doc(id).update(data);
       return true;
     } catch (e) {
       return false;
