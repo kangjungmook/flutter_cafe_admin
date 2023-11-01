@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cafe_admin/cafe_item.dart';
 import 'package:flutter_cafe_admin/cafe_result.dart';
+import 'package:flutter_cafe_admin/order.dart';
 import 'firebase_options.dart';
-import 'oreder.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -37,6 +37,7 @@ class _NaviState extends State<Navi> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: body,
         bottomNavigationBar: BottomNavigationBar(

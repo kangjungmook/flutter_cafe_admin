@@ -23,18 +23,11 @@ class MyCafe {
     try {
       //전체찾기
       if (id == null && fieldName == null) {
-        print('1');
         return await db.collection(collectionName).get();
       } else if (id != null) {
-        print('2');
         //고유아이디로 찾아서 리턴
-        return await db.collection(collectionName).doc(id).get();
-        // return await db
-        //     .collection(collectionName)
-        //     .where(FieldPath.documentId, isEqualTo: id)
-        //     .get();
+        return db.collection(collectionName).doc(id).get();
       } else if (fieldName != null) {
-        print('3');
         //필드값을 가지고 찾기
         return await db
             .collection(collectionName)
